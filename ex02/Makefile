@@ -1,6 +1,6 @@
 NAME = identify
 CXX = c++
-CXXFLAGS = -Wall -Wextra -Wall -std=c++98
+CXXFLAGS = -Wall -Wextra -Werror -std=c++98
 
 SRC =  main.cpp Base.cpp Identify.cpp
 OBJS = $(SRC:.cpp=.o)

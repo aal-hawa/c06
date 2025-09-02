@@ -18,7 +18,7 @@ static bool isFloat(const std::string& str)
 		return true;
 	char* end;
 	std::strtof(str.c_str(), &end);
-	return *end == 'f' && *(end + 1) == '\0';
+	return *end == 'f' && *(end + 1) == '\0'; //(*end == 'f' || *end == 'F')
 }
 
 static bool isDouble(const std::string& str)

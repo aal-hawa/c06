@@ -21,8 +21,11 @@ static bool isChar(const std::string& str)
 
 static bool isInt(const std::string& str)
 {
+	errno = 0;
 	char* end;
 	std::strtol(str.c_str(), &end, 10);
+	if (errno == ERANGE)
+		return false;
 	return *end == '\0';
 }
 
@@ -30,8 +33,11 @@ static bool isFloat(const std::string& str)
 {
 	if (str == "-inff" || str == "+inff" || str == "nanf")
 		return true;
+	errno = 0;
 	char* end;
-	std::strtof(str.c_str(), &end);
+	float f = std::strtof(str.c_str(), &end);	
+	if (errno == ERANGE || f == HUGE_VALF || f == -HUGE_VALF)
+		return false;
 	return *end == 'f' && *(end + 1) == '\0'; //(*end == 'f' || *end == 'F')
 }
 
@@ -39,8 +45,11 @@ static bool isDouble(const std::string& str)
 {
 	if (str == "-inf" || str == "+inf" || str == "nan")
 		return true;
+	errno = 0;
 	char* end;
-	std::strtod(str.c_str(), &end);
+	double d = std::strtod(str.c_str(), &end);
+	if (errno == ERANGE  || d == HUGE_VAL || d == -HUGE_VAL)
+		return false;
 	return *end == '\0';
 }
 
@@ -51,7 +60,7 @@ void ScalarConverter::convert(const std::string& literal)
 
 	if (isChar(literal))
 	{
-		char c = literal[0];
+		char c = literal[0];	
 		value = static_cast<double>(c);
 	}
 	else if (isInt(literal))
@@ -81,7 +90,7 @@ void ScalarConverter::convert(const std::string& literal)
 
 	//print float
 	std::cout << "float: ";
-	if (impossible)
+	if (impossible || value < std::numeric_limits<float>::min() || value > std::numeric_limits<float>::max())
 		std::cout << "impossible" << std::endl;
 	else 
 		// std::cout << static_cast<float>(value) << std::endl;
@@ -89,7 +98,7 @@ void ScalarConverter::convert(const std::string& literal)
 	
 	//print double
 	std::cout << "double: ";
-	if (impossible)
+	if (impossible || value < std::numeric_limits<double>::min() || value > std::numeric_limits<double>::max())
 		std::cout << "impossible" << std::endl;
 	else std::cout << std::fixed << std::setprecision(1) << value << std::endl;
 }

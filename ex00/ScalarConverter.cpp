@@ -40,7 +40,7 @@ static bool isNanInf(const std::string& str)
 
 static bool isFloat(const std::string& str)
 {
-	if (str == "-inff" || str == "+inff" || str == "nanf")
+	if (isNanInf(str))
 		return true;
 	errno = 0;
 	char* end;
@@ -52,8 +52,8 @@ static bool isFloat(const std::string& str)
 
 static bool isDouble(const std::string& str)
 {
-	if (str == "-inff" || str == "+inff" || str == "nanf")
-	return true;
+	if (isNanInf(str))
+		return true;
 	errno = 0;
 	char* end;
 	double d = std::strtod(str.c_str(), &end);
@@ -92,7 +92,7 @@ void ScalarConverter::convert(const std::string& literal)
 
 	//print int
 	std::cout << "int: ";
-	if (impossible || (!isNanInf(literal) && (std::isnan(value) || value < std::numeric_limits<int>::min() || value > std::numeric_limits<int>::max())))
+	if (impossible || (std::isnan(value) || value < std::numeric_limits<int>::min() || value > std::numeric_limits<int>::max()))
 		std::cout << "impossible" << std::endl;
 	else 
 		std::cout << static_cast<int>(value) << std::endl;
@@ -107,7 +107,7 @@ void ScalarConverter::convert(const std::string& literal)
 	
 	//print double
 	std::cout << "double: ";
-	if (impossible || value < -std::numeric_limits<double>::max() || value > std::numeric_limits<double>::max())
+	if (impossible || (!isNanInf(literal) && (value < -std::numeric_limits<double>::max() || value > std::numeric_limits<double>::max())))
 		std::cout << "impossible" << std::endl;
 	else 
 		std::cout << std::fixed << std::setprecision(1) << value << std::endl;

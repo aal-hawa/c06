@@ -3,8 +3,7 @@
 
 #include "Data.hpp"
 
-#include <stdint.h> //check this library from c- style for c++98 instead of #include <cstdint>
-
+#include <stdint.h>
 class Serializer {
 	private:
 		Serializer();

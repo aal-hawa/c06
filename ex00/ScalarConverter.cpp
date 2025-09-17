@@ -47,7 +47,7 @@ static bool isFloat(const std::string& str)
 	float f = std::strtof(str.c_str(), &end);	
 	if (errno == ERANGE || f == HUGE_VALF || f == -HUGE_VALF)
 		return false;
-	return *end == 'f' && *(end + 1) == '\0'; //(*end == 'f' || *end == 'F')
+	return *end == 'f' && *(end + 1) == '\0'; 
 }
 
 static bool isDouble(const std::string& str)
@@ -102,7 +102,6 @@ void ScalarConverter::convert(const std::string& literal)
 	if (impossible || (!isNanInf(literal) && (value < -std::numeric_limits<float>::max() || value > std::numeric_limits<float>::max())))
 		std::cout << "impossible" << std::endl;
 	else 
-		// std::cout << static_cast<float>(value) << std::endl;
 		std::cout << std::fixed << std::setprecision(1) << static_cast<float>(value) << "f" << std::endl;
 	
 	//print double

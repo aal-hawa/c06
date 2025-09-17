@@ -1,7 +1,6 @@
 #include "Identify.hpp"
 
 Base* generate(void) {
-	// std::srand(std::time(0));
 	int r = std::rand() % 3;
 
 	switch (r)
